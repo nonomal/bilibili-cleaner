@@ -23,7 +23,7 @@ html[homepage-layout-6-column] {
 html[homepage-layout-padding] {
     .bili-feed4-layout,
     .bili-feed4 .bili-header .bili-header__channel {
-        padding: 0 var(--layout-padding) !important;
+        padding: 0 var(--layout-padding, auto) !important;
     }
     .bili-feed4-layout,
     .bili-feed4 .bili-header .bili-header__channel {

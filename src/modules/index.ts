@@ -1,7 +1,7 @@
 import { GM_getValue } from '$'
 import { Group } from '../types/group'
 import { ICheckboxItem, INumberItem, IRadioItem } from '../types/item'
-import { isPageBangumi, isPageHomepage, isPagePlaylist, isPageVideo } from '../utils/pageType'
+import { isPageBangumi, isPageChannel, isPageHomepage, isPagePlaylist, isPageVideo } from '../utils/pageType'
 
 import { bangumiRules } from './rules/bangumi/index'
 import { channelRules } from './rules/channel/index'
@@ -103,6 +103,9 @@ export const loadModules = () => {
     if (isPageBangumi()) {
         loadGroups(bangumiRules)
     }
+    if (isPageChannel()) {
+        loadGroups(channelRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -115,5 +118,8 @@ export const loadStyles = () => {
     }
     if (isPageBangumi()) {
         loadStyle(bangumiCSS)
+    }
+    if (isPageChannel()) {
+        loadStyle(channelCSS)
     }
 }
