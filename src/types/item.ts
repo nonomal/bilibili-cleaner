@@ -1,5 +1,7 @@
+export type item = checkboxItem | numberItem | buttonItem | radioItem
+
 // 开关项
-export interface ICheckboxItem {
+export type checkboxItem = {
     // id 与 GM key 对应，与样式 HTML attribute 对应
     id: string
 
@@ -27,7 +29,7 @@ export interface ICheckboxItem {
 }
 
 // 数值设定项
-export interface INumberItem {
+export type numberItem = {
     // id 与 GM key 对应，与样式 HTML attribute 对应
     id: string
 
@@ -54,7 +56,7 @@ export interface INumberItem {
 }
 
 // 普通按钮项
-export interface IButtonIten {
+export type buttonItem = {
     // 功能介绍
     description: string
 
@@ -73,10 +75,10 @@ type radio = {
     // 功能介绍
     description: string
 
-    // 按钮功能函数
-    fn?: () => Promise<void> | void
+    // // 按钮功能函数
+    // fn?: () => Promise<void> | void
 }
-export interface IRadioItem {
+export type radioItem = {
     // 单选组 radio name
     radioName: string
 
