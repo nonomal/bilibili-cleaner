@@ -1,9 +1,9 @@
-import { item } from './item'
+import { Item } from './item'
 
-export type group = {
+export type Group = {
     // group name
     name: string
 
     // item list
-    items: item[]
+    items: Item[]
 }

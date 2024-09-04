@@ -16,12 +16,9 @@ import {
     isPageDynamic,
     isPageBangumi,
 } from './utils/pageType'
-
-// 模块生效
-const loadModule = () => {}
-
-// 样式注入
-const injectCSS = () => {}
+import { waitForBody, waitForHead } from './utils/init'
+import { debugMain, log } from './utils/logger'
+import { loadModules, loadStyles } from './modules'
 
 // 插件菜单
 const menu = () => {
@@ -153,3 +150,20 @@ const menu = () => {
     }
     register()
 }
+
+const main = () => {
+    loadModules()
+
+    waitForHead().then(() => {
+        loadStyles()
+        log('head exist')
+    })
+
+    waitForBody().then(() => {
+        log('body exist')
+    })
+
+    menu()
+}
+
+main()

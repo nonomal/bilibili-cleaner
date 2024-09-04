@@ -1,9 +1,20 @@
-export type item = checkboxItem | numberItem | buttonItem | radioItem
+/**
+ * item 是一个独立功能，也是 vue 组件的 props
+ */
+export type Item = ICheckboxItem | INumberItem | IButtonItem | IRadioItem
+
+interface IBaseItem {
+    // item类型
+    type: 'checkbox' | 'number' | 'radio' | 'button'
+}
 
 // 开关项
-export type checkboxItem = {
+export interface ICheckboxItem extends IBaseItem {
     // id 与 GM key 对应，与样式 HTML attribute 对应
     id: string
+
+    // item类型
+    type: 'checkbox'
 
     // 功能介绍
     description: string
@@ -29,9 +40,12 @@ export type checkboxItem = {
 }
 
 // 数值设定项
-export type numberItem = {
+export interface INumberItem extends IBaseItem {
     // id 与 GM key 对应，与样式 HTML attribute 对应
     id: string
+
+    // item类型
+    type: 'number'
 
     // 功能介绍
     description: string
@@ -56,9 +70,12 @@ export type numberItem = {
 }
 
 // 普通按钮项
-export type buttonItem = {
+export interface IButtonItem extends IBaseItem {
     // 功能介绍
     description: string
+
+    // item类型
+    type: 'button'
 
     // 按钮文字
     buttonText: string
@@ -67,24 +84,23 @@ export type buttonItem = {
     fn: () => Promise<void> | void
 }
 
-// 单选组，互斥开关项
-type radio = {
-    // id 与 GM key 对应，与样式 HTML attribute 对应
-    id: string
-
-    // 功能介绍
-    description: string
-
-    // // 按钮功能函数
-    // fn?: () => Promise<void> | void
-}
-export type radioItem = {
+// 互斥项 (单选组)
+export interface IRadioItem extends IBaseItem {
     // 单选组 radio name
     radioName: string
+
+    // item类型
+    type: 'radio'
 
     // 默认启用的 radio 项 id，id 需在列表内
     defaultEnableId?: string
 
-    // radio 列表
-    radios: radio[]
+    // radio项列表
+    radios: {
+        // id 与 GM key 对应，与样式 HTML attribute 对应
+        id: string
+
+        // 功能介绍
+        description: string
+    }[]
 }

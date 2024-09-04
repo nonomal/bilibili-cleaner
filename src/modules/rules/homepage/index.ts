@@ -1,11 +1,11 @@
-import { group } from '../../../types/group'
+import { Group } from '../../../types/group'
 import { homepageAsideItems } from './groups/aside'
 import { homepageBasicItems } from './groups/basic'
 import { homepageLayoutItems } from './groups/layout'
 import { homepagePluginItems } from './groups/plugin'
 import { homepageRcmdFeedItems } from './groups/rcmdFeed'
 
-export const homepageRules: group[] = [
+export const homepageRules: Group[] = [
     {
         name: '首页 基本功能',
         items: homepageBasicItems,

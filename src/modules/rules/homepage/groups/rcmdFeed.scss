@@ -93,15 +93,15 @@
 
 // 隐藏 广告, 默认开启
 [homepage-hide-ad-card] {
-    :is(.feed-card, .bili-video-card):has(
-            .bili-video-card__info--ad,
-            [href*='cm.bilibili.com'],
-            .bili-video-card__info--creative-ad
-        ) {
-        display: none !important;
-    }
-    :is(.feed-card, .bili-video-card):not(:has(.bili-video-card__wrap, .bili-video-card__skeleton)) {
-        display: none !important;
+    .feed-card,
+    .bili-video-card {
+        &:has([href*='cm.bilibili.com'], .bili-video-card__info--ad, .bili-video-card__info--creative-ad) {
+            display: none !important;
+        }
+
+        &:not(:has(.bili-video-card__wrap, .bili-video-card__skeleton)) {
+            display: none !important;
+        }
     }
     /* 布局调整 */
     .recommended-container_floor-aside .container > *:nth-of-type(5) {

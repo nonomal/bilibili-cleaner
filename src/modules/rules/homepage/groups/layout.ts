@@ -1,7 +1,8 @@
-import { item } from '../../../../types/item'
+import { Item } from '../../../../types/item'
 
-export const homepageLayoutItems: item[] = [
+export const homepageLayoutItems: Item[] = [
     {
+        type: 'radio',
         radioName: 'homepage-layout',
         defaultEnableId: 'homepage-layout-default',
         radios: [
@@ -25,6 +26,7 @@ export const homepageLayoutItems: item[] = [
     },
     {
         id: 'homepage-layout-padding',
+        type: 'number',
         description: '修改 页面两侧边距 (-1禁用)',
         minValue: -1,
         maxValue: 500,
