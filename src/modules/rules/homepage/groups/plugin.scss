@@ -1,5 +1,5 @@
 // 隐藏 视频tag
-[homepage-hide-up-info-icon-bilibili-app-recommend] {
+html[homepage-hide-up-info-icon-bilibili-app-recommend] {
     /* 适配 bilibili-app-recommend */
     .bilibili-app-recommend-root
         .bili-video-card:not(:has(.ant-avatar))
@@ -35,14 +35,14 @@
 }
 
 // 隐藏 弹幕数
-[homepage-hide-danmaku-count-bilibili-app-recommend] {
+html[homepage-hide-danmaku-count-bilibili-app-recommend] {
     .bili-video-card:has(use) .bili-video-card__stats--item:has([href='#widget-video-danmaku']) {
         display: none !important;
     }
 }
 
 // 隐藏 点赞数
-[homepage-hide-agree-count-bilibili-app-recommend] {
+html[homepage-hide-agree-count-bilibili-app-recommend] {
     .bili-video-card:has(use) .bili-video-card__stats--item:has([href='#widget-agree']) {
         display: none !important;
     }

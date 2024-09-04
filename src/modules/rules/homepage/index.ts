@@ -1,5 +1,5 @@
 import { Group } from '../../../types/group'
-import { homepageAsideItems } from './groups/aside'
+import { homepageSidebarItems } from './groups/sidebar'
 import { homepageBasicItems } from './groups/basic'
 import { homepageLayoutItems } from './groups/layout'
 import { homepagePluginItems } from './groups/plugin'
@@ -20,7 +20,7 @@ export const homepageRules: Group[] = [
     },
     {
         name: '页面侧栏 小组件',
-        items: homepageAsideItems,
+        items: homepageSidebarItems,
     },
     {
         name: '适配插件 (bilibili-app-recommend)',

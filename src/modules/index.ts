@@ -32,7 +32,9 @@ import watchlaterCSS from './rules/watchlater/index.scss?inline'
 const loadCheckboxItem = (item: ICheckboxItem) => {
     const isEnable = GM_getValue(item.id, item.defaultEnable)
     if (isEnable) {
-        document.documentElement?.setAttribute(item.id, '')
+        if (!item.noStyle) {
+            document.documentElement?.setAttribute(item.id, '')
+        }
         if (item.enableFn) {
             if (item.enableFnRunAt === 'document-start') {
                 item.enableFn()?.then().catch()
@@ -54,6 +56,12 @@ const loadNumberItem = (item: INumberItem) => {
 }
 
 const loadRadioItem = (item: IRadioItem) => {
+    for (const radio of item.radios) {
+        if (GM_getValue(radio.id)) {
+            document.documentElement?.setAttribute(radio.id, '')
+            return
+        }
+    }
     if (item.defaultEnableId) {
         document.documentElement?.setAttribute(item.defaultEnableId, '')
     }
@@ -89,9 +97,11 @@ export const loadModules = () => {
     if (isPageHomepage()) {
         loadGroups(homepageRules)
     }
-
     if (isPageVideo() || isPagePlaylist()) {
         loadGroups(videoRules)
+    }
+    if (isPageBangumi()) {
+        loadGroups(bangumiRules)
     }
 }
 

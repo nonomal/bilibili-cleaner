@@ -32,6 +32,7 @@ export const homepageLayoutItems: Item[] = [
         maxValue: 500,
         defaultValue: -1,
         disableValue: -1,
+        addonText: 'px',
         fn: (value: number) => {
             document.documentElement.style.setProperty('--layout-padding', `${value}px`)
         },

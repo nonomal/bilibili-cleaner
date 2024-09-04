@@ -1,6 +1,6 @@
 import { Item } from '../../../../types/item'
 
-export const homepageAsideItems: Item[] = [
+export const homepageSidebarItems: Item[] = [
     {
         id: 'homepage-hide-desktop-download-tip',
         type: 'checkbox',

@@ -19,6 +19,7 @@ import {
 import { waitForBody, waitForHead } from './utils/init'
 import { debugMain, log } from './utils/logger'
 import { loadModules, loadStyles } from './modules'
+import { upgrade } from './utils/upgrade'
 
 // 插件菜单
 const menu = () => {
@@ -152,6 +153,9 @@ const menu = () => {
 }
 
 const main = () => {
+    // 版本升级
+    upgrade()
+
     loadModules()
 
     waitForHead().then(() => {

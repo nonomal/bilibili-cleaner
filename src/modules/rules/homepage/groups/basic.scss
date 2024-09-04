@@ -1,5 +1,5 @@
 // 隐藏 横幅banner
-[homepage-hide-banner] {
+html[homepage-hide-banner] {
     .header-banner__inner,
     .bili-header__banner {
         display: none !important;
@@ -70,7 +70,7 @@
 }
 
 // 隐藏 大图活动轮播
-[homepage-hide-recommend-swipe] {
+html[homepage-hide-recommend-swipe] {
     .recommended-swipe {
         display: none !important;
     }
@@ -129,7 +129,7 @@
 }
 
 // 隐藏 整个分区栏
-[homepage-hide-subarea] {
+html[homepage-hide-subarea] {
     // 高权限, 否则被压缩分区栏高度影响
     #i_cecream .bili-header__channel .channel-icons {
         display: none !important;
@@ -147,7 +147,7 @@
 }
 
 // 隐藏 滚动页面时 顶部吸附顶栏
-[homepage-hide-sticky-header] {
+html[homepage-hide-sticky-header] {
     .bili-header .left-entry__title svg {
         display: none !important;
     }
@@ -218,7 +218,7 @@
 }
 
 // 隐藏 滚动页面时 顶部吸附分区栏
-[homepage-hide-sticky-subarea] {
+html[homepage-hide-sticky-subarea] {
     #i_cecream .header-channel {
         display: none !important;
     }
@@ -234,14 +234,14 @@
 }
 
 // 隐藏 顶部adblock提示
-[homepage-hide-adblock-tips] {
+html[homepage-hide-adblock-tips] {
     .adblock-tips {
         display: none !important;
     }
 }
 
 // 恢复 原始动态按钮
-[homepage-revert-channel-dynamic-icon] {
+html[homepage-revert-channel-dynamic-icon] {
     .bili-header__channel .channel-icons .icon-bg__dynamic picture {
         display: none !important;
     }

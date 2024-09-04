@@ -50,6 +50,9 @@ export interface INumberItem extends IBaseItem {
     // 功能介绍
     description: string
 
+    // 是否无样式
+    noStyle?: boolean
+
     // 最小值
     minValue: number
 
@@ -61,6 +64,9 @@ export interface INumberItem extends IBaseItem {
 
     // 禁用值
     disableValue: number
+
+    // input框后附加文字，如单位
+    addonText: string
 
     /**
      * 回调，值初始化或变化时执行，可用于修改样式 var() 变量值

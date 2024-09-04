@@ -1,5 +1,5 @@
 // 增大 视频信息字号
-[homepage-increase-rcmd-list-font-size] {
+html[homepage-increase-rcmd-list-font-size] {
     .bili-video-card .bili-video-card__info--tit,
     .bili-live-card .bili-live-card__info--tit,
     .single-card.floor-card .title {
@@ -17,7 +17,7 @@
 }
 
 // 隐藏 视频负反馈 恢复标题宽度
-[homepage-hide-no-interest] {
+html[homepage-hide-no-interest] {
     .bili-video-card.enable-no-interest,
     .bili-live-card.enable-no-interest {
         --title-padding-right: 0;
@@ -29,7 +29,7 @@
 }
 
 // 隐藏 视频tag (已关注/1万点赞)
-[homepage-hide-up-info-icon] {
+html[homepage-hide-up-info-icon] {
     /* CSS伪造Logo */
     .bili-video-card .bili-video-card__info--icon-text {
         width: 17px;
@@ -56,35 +56,35 @@
 }
 
 // 隐藏 发布时间
-[homepage-hide-video-info-date] {
+html[homepage-hide-video-info-date] {
     main:not(:has(.bilibili-app-recommend-root)) .bili-video-card__info--date {
         display: none !important;
     }
 }
 
 // 隐藏 弹幕数, 默认开启
-[homepage-hide-danmaku-count] {
+html[homepage-hide-danmaku-count] {
     main:not(:has(.bilibili-app-recommend-root)) .bili-video-card__stats--item:nth-child(2) {
         display: none !important;
     }
 }
 
 // 隐藏 稍后再看提示语
-[homepage-hide-bili-watch-later-tip] {
+html[homepage-hide-bili-watch-later-tip] {
     .bili-watch-later__tip--lab {
         display: none !important;
     }
 }
 
 // 隐藏 稍后再看按钮
-[homepage-hide-bili-watch-later] {
+html[homepage-hide-bili-watch-later] {
     .bili-watch-later {
         display: none !important;
     }
 }
 
 // 隐藏 视频预览中的弹幕
-[homepage-hide-inline-player-danmaku] {
+html[homepage-hide-inline-player-danmaku] {
     .bpx-player-row-dm-wrap,
     .bpx-player-cmd-dm-wrap {
         display: none !important;
@@ -92,7 +92,7 @@
 }
 
 // 隐藏 广告, 默认开启
-[homepage-hide-ad-card] {
+html[homepage-hide-ad-card] {
     .feed-card,
     .bili-video-card {
         &:has([href*='cm.bilibili.com'], .bili-video-card__info--ad, .bili-video-card__info--creative-ad) {
@@ -132,7 +132,7 @@
 }
 
 // 隐藏 直播间推荐
-[homepage-hide-live-card-recommend] {
+html[homepage-hide-live-card-recommend] {
     .bili-live-card,
     .floor-single-card:has(use[*|href$='#channel-live']) {
         display: none !important;
@@ -140,7 +140,7 @@
 }
 
 // 精简 分区视频推荐, 默认开启
-[homepage-simple-sub-area-card-recommend] {
+html[homepage-simple-sub-area-card-recommend] {
     .floor-single-card .layer {
         display: none !important;
     }
@@ -154,7 +154,7 @@
 }
 
 // 隐藏 分区视频推荐
-[homepage-hide-sub-area-card-recommend] {
+html[homepage-hide-sub-area-card-recommend] {
     // 含skeleton时不隐藏否则出现空档
     .floor-single-card:not(:has(.skeleton, .skeleton-item)) {
         display: none !important;
@@ -162,7 +162,7 @@
 }
 
 // 关闭 视频载入 骨架动效
-[homepage-hide-skeleton-animation] {
+html[homepage-hide-skeleton-animation] {
     .bili-video-card .loading_animation .bili-video-card__skeleton--light,
     .bili-video-card .loading_animation .bili-video-card__skeleton--text,
     .bili-video-card .loading_animation .bili-video-card__skeleton--face,
@@ -178,7 +178,7 @@
 }
 
 // 隐藏 视频载入 骨架
-[homepage-hide-skeleton] {
+html[homepage-hide-skeleton] {
     // anchor占位也隐藏
     .bili-video-card:has(.loading_animation),
     .load-more-anchor {
@@ -190,7 +190,7 @@
 }
 
 // 增大 视频载入 视频数量
-[homepage-increase-rcmd-load-size] {
+html[homepage-increase-rcmd-load-size] {
     /* 扩增载入后会产生奇怪的骨架空位 */
     .container > .floor-single-card:has(.skeleton, .skeleton-item, .floor-skeleton) {
         display: none;
@@ -198,7 +198,7 @@
 }
 
 // 启用 预加载下一屏
-[homepage-rcmd-video-preload] {
+html[homepage-rcmd-video-preload] {
     .load-more-anchor.preload {
         position: fixed;
         z-index: -99999;
