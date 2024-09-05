@@ -4,6 +4,7 @@ import { ICheckboxItem, INumberItem, IRadioItem } from '../types/item'
 import {
     isPageBangumi,
     isPageChannel,
+    isPageDynamic,
     isPageHomepage,
     isPagePlaylist,
     isPageSearch,
@@ -118,6 +119,9 @@ export const loadModules = () => {
     if (isPageSearch()) {
         loadGroups(searchRules)
     }
+    if (isPageDynamic()) {
+        loadGroups(dynamicRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -136,5 +140,8 @@ export const loadStyles = () => {
     }
     if (isPageSearch()) {
         loadStyle(searchCSS)
+    }
+    if (isPageDynamic()) {
+        loadStyle(dynamicCSS)
     }
 }
