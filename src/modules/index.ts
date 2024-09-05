@@ -10,6 +10,7 @@ import {
     isPageSearch,
     isPageSpace,
     isPageVideo,
+    isPageWatchlater,
 } from '../utils/pageType'
 
 import { bangumiRules } from './rules/bangumi/index'
@@ -126,6 +127,9 @@ export const loadModules = () => {
     if (isPageSpace()) {
         loadGroups(spaceRules)
     }
+    if (isPageWatchlater()) {
+        loadGroups(watchlaterRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -150,5 +154,8 @@ export const loadStyles = () => {
     }
     if (isPageSpace()) {
         loadStyle(spaceCSS)
+    }
+    if (isPageWatchlater()) {
+        loadStyle(watchlaterCSS)
     }
 }
