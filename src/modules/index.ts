@@ -6,6 +6,8 @@ import {
     isPageChannel,
     isPageDynamic,
     isPageHomepage,
+    isPageLiveHome,
+    isPageLiveRoom,
     isPagePlaylist,
     isPageSearch,
     isPageSpace,
@@ -38,6 +40,68 @@ import searchCSS from './rules/search/index.scss?inline'
 import spaceCSS from './rules/space/index.scss?inline'
 import videoCSS from './rules/video/index.scss?inline'
 import watchlaterCSS from './rules/watchlater/index.scss?inline'
+
+/** 加载模块 */
+export const loadModules = () => {
+    if (isPageHomepage()) {
+        loadGroups(homepageRules)
+    }
+    if (isPageVideo() || isPagePlaylist()) {
+        loadGroups(videoRules)
+    }
+    if (isPageBangumi()) {
+        loadGroups(bangumiRules)
+    }
+    if (isPageChannel()) {
+        loadGroups(channelRules)
+    }
+    if (isPageSearch()) {
+        loadGroups(searchRules)
+    }
+    if (isPageDynamic()) {
+        loadGroups(dynamicRules)
+    }
+    if (isPageSpace()) {
+        loadGroups(spaceRules)
+    }
+    if (isPageWatchlater()) {
+        loadGroups(watchlaterRules)
+    }
+    if (isPageLiveHome() || isPageLiveRoom()) {
+        loadGroups(liveRules)
+    }
+}
+
+/** 载入样式，需在document.head出现后执行 */
+export const loadStyles = () => {
+    if (isPageHomepage()) {
+        loadStyle(homepageCSS)
+    }
+    if (isPageVideo() || isPagePlaylist()) {
+        loadStyle(videoCSS)
+    }
+    if (isPageBangumi()) {
+        loadStyle(bangumiCSS)
+    }
+    if (isPageChannel()) {
+        loadStyle(channelCSS)
+    }
+    if (isPageSearch()) {
+        loadStyle(searchCSS)
+    }
+    if (isPageDynamic()) {
+        loadStyle(dynamicCSS)
+    }
+    if (isPageSpace()) {
+        loadStyle(spaceCSS)
+    }
+    if (isPageWatchlater()) {
+        loadStyle(watchlaterCSS)
+    }
+    if (isPageLiveHome() || isPageLiveRoom()) {
+        loadStyle(liveCSS)
+    }
+}
 
 const loadCheckboxItem = (item: ICheckboxItem) => {
     const isEnable = GM_getValue(item.id, item.defaultEnable)
@@ -102,60 +166,4 @@ const loadStyle = (css: string) => {
     e.innerHTML = css
     e.className = 'bili-cleaner'
     document.documentElement?.appendChild(e)
-}
-
-/** 加载模块 */
-export const loadModules = () => {
-    if (isPageHomepage()) {
-        loadGroups(homepageRules)
-    }
-    if (isPageVideo() || isPagePlaylist()) {
-        loadGroups(videoRules)
-    }
-    if (isPageBangumi()) {
-        loadGroups(bangumiRules)
-    }
-    if (isPageChannel()) {
-        loadGroups(channelRules)
-    }
-    if (isPageSearch()) {
-        loadGroups(searchRules)
-    }
-    if (isPageDynamic()) {
-        loadGroups(dynamicRules)
-    }
-    if (isPageSpace()) {
-        loadGroups(spaceRules)
-    }
-    if (isPageWatchlater()) {
-        loadGroups(watchlaterRules)
-    }
-}
-
-/** 载入样式，需在document.head出现后执行 */
-export const loadStyles = () => {
-    if (isPageHomepage()) {
-        loadStyle(homepageCSS)
-    }
-    if (isPageVideo() || isPagePlaylist()) {
-        loadStyle(videoCSS)
-    }
-    if (isPageBangumi()) {
-        loadStyle(bangumiCSS)
-    }
-    if (isPageChannel()) {
-        loadStyle(channelCSS)
-    }
-    if (isPageSearch()) {
-        loadStyle(searchCSS)
-    }
-    if (isPageDynamic()) {
-        loadStyle(dynamicCSS)
-    }
-    if (isPageSpace()) {
-        loadStyle(spaceCSS)
-    }
-    if (isPageWatchlater()) {
-        loadStyle(watchlaterCSS)
-    }
 }

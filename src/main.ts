@@ -155,6 +155,7 @@ const menu = () => {
 const main = () => {
     // 版本升级
     upgrade()
+    log('upgrade done')
 
     loadModules()
     log('loadModules done')
