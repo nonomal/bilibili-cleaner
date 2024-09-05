@@ -157,14 +157,16 @@ const main = () => {
     upgrade()
 
     loadModules()
+    log('loadModules done')
 
     waitForHead().then(() => {
+        log('head appear')
         loadStyles()
-        log('head exist')
+        log('loadStyles done')
     })
 
     waitForBody().then(() => {
-        log('body exist')
+        log('body appear')
     })
 
     menu()

@@ -1,7 +1,14 @@
 import { GM_getValue } from '$'
 import { Group } from '../types/group'
 import { ICheckboxItem, INumberItem, IRadioItem } from '../types/item'
-import { isPageBangumi, isPageChannel, isPageHomepage, isPagePlaylist, isPageVideo } from '../utils/pageType'
+import {
+    isPageBangumi,
+    isPageChannel,
+    isPageHomepage,
+    isPagePlaylist,
+    isPageSearch,
+    isPageVideo,
+} from '../utils/pageType'
 
 import { bangumiRules } from './rules/bangumi/index'
 import { channelRules } from './rules/channel/index'
@@ -32,7 +39,7 @@ import watchlaterCSS from './rules/watchlater/index.scss?inline'
 const loadCheckboxItem = (item: ICheckboxItem) => {
     const isEnable = GM_getValue(item.id, item.defaultEnable)
     if (isEnable) {
-        if (!item.noStyle) {
+        if (!item.noStyle && item.id) {
             document.documentElement?.setAttribute(item.id, '')
         }
         if (item.enableFn) {
@@ -51,13 +58,15 @@ const loadNumberItem = (item: INumberItem) => {
     const value = GM_getValue(item.id, item.defaultValue)
     if (value !== item.disableValue) {
         item.fn(value)?.then().catch()
-        document.documentElement?.setAttribute(item.id, '')
+        if (!item.noStyle && item.id) {
+            document.documentElement?.setAttribute(item.id, '')
+        }
     }
 }
 
 const loadRadioItem = (item: IRadioItem) => {
     for (const radio of item.radios) {
-        if (GM_getValue(radio.id)) {
+        if (GM_getValue(radio.id) && radio.id) {
             document.documentElement?.setAttribute(radio.id, '')
             return
         }
@@ -106,6 +115,9 @@ export const loadModules = () => {
     if (isPageChannel()) {
         loadGroups(channelRules)
     }
+    if (isPageSearch()) {
+        loadGroups(searchRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -121,5 +133,8 @@ export const loadStyles = () => {
     }
     if (isPageChannel()) {
         loadStyle(channelCSS)
+    }
+    if (isPageSearch()) {
+        loadStyle(searchCSS)
     }
 }
