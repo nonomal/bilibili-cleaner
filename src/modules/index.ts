@@ -8,6 +8,7 @@ import {
     isPageHomepage,
     isPagePlaylist,
     isPageSearch,
+    isPageSpace,
     isPageVideo,
 } from '../utils/pageType'
 
@@ -122,6 +123,9 @@ export const loadModules = () => {
     if (isPageDynamic()) {
         loadGroups(dynamicRules)
     }
+    if (isPageSpace()) {
+        loadGroups(spaceRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -143,5 +147,8 @@ export const loadStyles = () => {
     }
     if (isPageDynamic()) {
         loadStyle(dynamicCSS)
+    }
+    if (isPageSpace()) {
+        loadStyle(spaceCSS)
     }
 }
