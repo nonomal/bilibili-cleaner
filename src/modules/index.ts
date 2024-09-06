@@ -70,6 +70,9 @@ export const loadModules = () => {
     if (isPageLiveHome() || isPageLiveRoom()) {
         loadGroups(liveRules)
     }
+    if (isPageBangumi() || isPageVideo() || isPageDynamic() || isPageSpace() || isPagePlaylist()) {
+        loadGroups(commentRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -100,6 +103,9 @@ export const loadStyles = () => {
     }
     if (isPageLiveHome() || isPageLiveRoom()) {
         loadStyle(liveCSS)
+    }
+    if (isPageBangumi() || isPageVideo() || isPageDynamic() || isPageSpace() || isPagePlaylist()) {
+        loadStyle(commentCSS)
     }
 }
 
