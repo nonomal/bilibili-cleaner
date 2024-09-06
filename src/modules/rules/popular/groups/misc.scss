@@ -1,0 +1,20 @@
+// 隐藏 综合热门 视频tag
+[popular-hot-hide-tag] {
+    .popular-list .rcmd-tag {
+        display: none !important;
+    }
+}
+
+// 隐藏 每周必看 一句话简介
+[popular-weekly-hide-hint] {
+    .weekly-list .weekly-hint {
+        display: none !important;
+    }
+}
+
+// 隐藏 入站必刷 一句话简介
+[popular-history-hide-hint] {
+    .history-list .history-hint {
+        display: none !important;
+    }
+}

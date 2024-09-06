@@ -9,6 +9,7 @@ import {
     isPageLiveHome,
     isPageLiveRoom,
     isPagePlaylist,
+    isPagePopular,
     isPageSearch,
     isPageSpace,
     isPageVideo,
@@ -73,6 +74,9 @@ export const loadModules = () => {
     if (isPageBangumi() || isPageVideo() || isPageDynamic() || isPageSpace() || isPagePlaylist()) {
         loadGroups(commentRules)
     }
+    if (isPagePopular()) {
+        loadGroups(popularRules)
+    }
 }
 
 /** 载入样式，需在document.head出现后执行 */
@@ -106,6 +110,9 @@ export const loadStyles = () => {
     }
     if (isPageBangumi() || isPageVideo() || isPageDynamic() || isPageSpace() || isPagePlaylist()) {
         loadStyle(commentCSS)
+    }
+    if (isPagePopular()) {
+        loadStyle(popularCSS)
     }
 }
 
