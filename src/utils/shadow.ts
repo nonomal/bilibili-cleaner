@@ -1,5 +1,5 @@
-import { error } from './logger'
-import { isPageBangumi, isPageDynamic, isPagePlaylist, isPageVideo } from './pageType'
+import { logger } from '@/utils/logger'
+import { isPageBangumi, isPageDynamic, isPageFestival, isPagePlaylist, isPageSpace, isPageVideo } from './pageType'
 
 type TagName = string
 
@@ -36,11 +36,18 @@ export class Shadow {
     private constructor() {
         try {
             // 特定页面运行
-            if (isPageVideo() || isPageBangumi() || isPageDynamic() || isPagePlaylist()) {
+            if (
+                isPageVideo() ||
+                isPageBangumi() ||
+                isPageSpace() ||
+                isPageDynamic() ||
+                isPagePlaylist() ||
+                isPageFestival()
+            ) {
                 this.hook()
             }
         } catch (err) {
-            error('hook shadow failed', err)
+            logger.error('hook shadow failed', err)
         }
     }
 

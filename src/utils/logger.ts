@@ -1,4 +1,4 @@
-import settings from '../settings'
+import config from '@/config'
 
 const startTime: number = performance.now()
 let lastTime: number = startTime
@@ -11,26 +11,20 @@ let currTime: number = startTime
  * 使用 performance.now() 做精确计时
  *
  * @param loggingFunc console.log等带级别打印日志的函数
- * @param isEnable 是否打印日志
  * @returns 返回wrap后的日志函数
  */
-const wrapper = (loggingFunc: (..._args: any[]) => void | undefined, isEnable: boolean) => {
-    if (isEnable) {
-        return (...innerArgs: any[]) => {
-            currTime = performance.now()
-            const during: string = (currTime - lastTime).toFixed(1)
-            loggingFunc(`[bili-cleaner] ${during} / ${currTime.toFixed(0)} ms |`, ...innerArgs)
-            lastTime = currTime
-        }
+const wrapper = (loggingFunc: (..._args: any[]) => void | undefined) => {
+    return (...innerArgs: any[]) => {
+        currTime = performance.now()
+        const during: string = (currTime - lastTime).toFixed(1)
+        loggingFunc(`[bili-cleaner] ${during} / ${currTime.toFixed(0)} ms |`, ...innerArgs)
+        lastTime = currTime
     }
-    return (..._args: any) => {}
 }
 
-export const log = wrapper(console.log, true)
-export const error = wrapper(console.error, true)
-export const debugMain = wrapper(console.log, settings.enableDebugMain)
-export const debugComponents = wrapper(console.log, settings.enableDebugComponents)
-export const debugRules = wrapper(console.log, settings.enableDebugRules)
-export const debugVideoFilter = wrapper(console.log, settings.enableDebugVideoFilter)
-export const debugCommentFilter = wrapper(console.log, settings.enableDebugCommentFilter)
-export const debugDynFilter = wrapper(console.log, settings.enableDebugDynFilter)
+export const logger = {
+    log: wrapper(console.log),
+    info: wrapper(console.info),
+    error: wrapper(console.error),
+    debug: config.isDebugMode ? wrapper(console.debug) : () => {},
+}

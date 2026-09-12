@@ -3,14 +3,6 @@ const host = location.host
 const pathname = location.pathname
 
 const currPage = (): string => {
-    // 无效url
-    if (
-        href.includes('www.bilibili.com/correspond/') ||
-        href.includes('live.bilibili.com/p/html/') ||
-        href.includes('live.bilibili.com/live-room-play-game-together')
-    ) {
-        return 'invalid'
-    }
     if (href.startsWith('https://www.bilibili.com') && ['/index.html', '/'].includes(pathname)) {
         return 'homepage'
     }
@@ -31,15 +23,7 @@ const currPage = (): string => {
         return 'dynamic'
     }
     if (host === 'live.bilibili.com') {
-        // 匹配blanc页（赛事直播or活动直播用），用于对iframe内直播生效
-        if (/^\/(?:blanc\/)?\d+(#\/)?/.test(pathname)) {
-            return 'liveRoom'
-        }
-        // 匹配各种直播页iframe、直播活动, 不做处理
-        if (/live\.bilibili\.com\/(p\/html|activity|blackboard)/.test(href)) {
-            return ''
-        }
-        return 'liveHome'
+        return 'live'
     }
     if (href.includes('bilibili.com/bangumi/play/')) {
         return 'bangumi'
@@ -50,12 +34,15 @@ const currPage = (): string => {
     if (host === 'space.bilibili.com') {
         return 'space'
     }
-    // 分区子分类
-    if (!href.includes('bilibili.com/v/popular/') && href.includes('bilibili.com/v/')) {
+    if (host === 'message.bilibili.com') {
+        return 'message'
+    }
+    // 新版分区
+    if (href.includes('bilibili.com/c/')) {
         return 'channel'
     }
-    // 拜年祭等活动
-    if (href.includes('www.bilibili.com/festival/')) {
+    // 拜年祭等活动播放页
+    if (/www\.bilibili\.com\/festival\//.test(href)) {
         return 'festival'
     }
     if (href.includes('bilibili.com/watchlater')) {
@@ -66,17 +53,16 @@ const currPage = (): string => {
 
 const ans = currPage()
 
-export const isPageInvalid = () => ans === 'invalid'
 export const isPageHomepage = () => ans === 'homepage'
 export const isPageVideo = () => ans === 'video'
 export const isPagePopular = () => ans === 'popular'
 export const isPageSearch = () => ans === 'search'
 export const isPageDynamic = () => ans === 'dynamic'
-export const isPageLiveHome = () => ans === 'liveHome'
-export const isPageLiveRoom = () => ans === 'liveRoom'
+export const isPageLive = () => ans === 'live'
 export const isPageBangumi = () => ans === 'bangumi'
 export const isPagePlaylist = () => ans === 'playlist'
 export const isPageFestival = () => ans === 'festival'
 export const isPageChannel = () => ans === 'channel'
 export const isPageSpace = () => ans === 'space'
 export const isPageWatchlater = () => ans === 'watchlater'
+export const isPageMessage = () => ans === 'message'

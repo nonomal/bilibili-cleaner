@@ -1,6 +1,5 @@
 import { unsafeWindow } from '$'
-import { error } from './logger'
-import { isPageInvalid } from './pageType'
+import { logger } from '@/utils/logger'
 
 class FetchHook {
     private static instance: FetchHook
@@ -16,11 +15,9 @@ class FetchHook {
 
     private constructor() {
         try {
-            if (!isPageInvalid()) {
-                this.hook()
-            }
+            this.hook()
         } catch (err) {
-            error('hook fetch error', err)
+            logger.error('hook fetch error', err)
         }
     }
 
@@ -68,7 +65,7 @@ class FetchHook {
                     }
                 }
             } catch (err) {
-                error('fetch hook postFnArr', err)
+                logger.error('fetch hook postFnArr', err)
                 return origResp
             }
             return resp

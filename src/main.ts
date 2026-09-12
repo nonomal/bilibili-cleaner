@@ -1,235 +1,135 @@
-// @ts-ignore isolatedModules
-import { GM_getValue, GM_registerMenuCommand, GM_unregisterMenuCommand } from '$'
-import { Group } from './components/group'
-import { Panel } from './components/panel'
-import { SideBtn } from './components/sideBtn'
-import { dynamicPageCommentFilterGroupList } from './filters/comment/dyn'
-import { spacePageCommentFilterGroupList } from './filters/comment/space'
-import { videoPageCommentFilterGroupList } from './filters/comment/video'
-import { dynamicPageDynFilterGroupList } from './filters/dyn/dyn'
-import { channelPageVideoFilterGroupList } from './filters/video/channel'
-import { homepagePageVideoFilterGroupList } from './filters/video/homepage'
-import { popularPageVideoFilterGroupList } from './filters/video/popular'
-import { searchPageVideoFilterGroupList } from './filters/video/search'
-import { spacePageVideoFilterGroupList } from './filters/video/space'
-import { videoPageVideoFilterGroupList } from './filters/video/video'
-import { init } from './init'
-import { bangumiGroupList } from './rules/bangumi'
-import { channelGroupList } from './rules/channel'
-import { commentGroupList } from './rules/comment'
-import { commonGroupList } from './rules/common'
-import { dynamicGroupList } from './rules/dynamic'
-import { homepageGroupList } from './rules/homepage'
-import { liveGroupList } from './rules/live'
-import { popularGroupList } from './rules/popular'
-import { searchGroupList } from './rules/search'
-import { spaceGroupList } from './rules/space'
-import { videoGroupList } from './rules/video'
-import { watchlaterGroupList } from './rules/watchlater'
-import { debugMain as debug, error, log } from './utils/logger'
+import { GM_registerMenuCommand } from '$'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import App from './App.vue'
+import { loadModules } from './modules'
+import { toggleDarkMode } from './modules/rules/common/groups/theme'
 import {
-    isPageBangumi,
-    isPageChannel,
-    isPageDynamic,
-    isPageHomepage,
-    isPageInvalid,
-    isPagePlaylist,
-    isPagePopular,
-    isPageSearch,
-    isPageSpace,
-    isPageVideo,
-} from './utils/pageType'
+    useArticleFilterPanelStore,
+    useCommentFilterPanelStore,
+    useDynamicFilterPanelStore,
+    useRulePanelStore,
+    useSideBtnStore,
+    useVideoFilterPanelStore,
+} from './stores/view'
+import css from './style.css?style'
+import { waitForBody } from './utils/init'
+import { logger } from '@/utils/logger'
+import { isPageLive } from './utils/pageType'
+import { migrate } from './utils/storage'
 
-const main = async () => {
-    // 载入元素屏蔽规则
-    const RULE_GROUPS = [
-        ...homepageGroupList,
-        ...popularGroupList,
-        ...videoGroupList,
-        ...bangumiGroupList,
-        ...searchGroupList,
-        ...dynamicGroupList,
-        ...liveGroupList,
-        ...channelGroupList,
-        ...watchlaterGroupList,
-        ...spaceGroupList,
-        ...commentGroupList,
-        ...commonGroupList,
-    ]
-    RULE_GROUPS.forEach((e) => e.enableGroup())
-
-    // 载入视频过滤器
-    const VIDEO_FILTER_GROUPS = [
-        ...homepagePageVideoFilterGroupList,
-        ...videoPageVideoFilterGroupList,
-        ...popularPageVideoFilterGroupList,
-        ...searchPageVideoFilterGroupList,
-        ...channelPageVideoFilterGroupList,
-        ...spacePageVideoFilterGroupList,
-    ]
-    VIDEO_FILTER_GROUPS.forEach((e) => e.enableGroup())
-
-    // 载入评论过滤器
-    const COMMENT_FILTER_GROUPS = [
-        ...videoPageCommentFilterGroupList,
-        ...dynamicPageCommentFilterGroupList,
-        ...spacePageCommentFilterGroupList,
-    ]
-    COMMENT_FILTER_GROUPS.forEach((e) => e.enableGroup())
-
-    // 载入动态过滤器
-    const DYN_FILTER_GROUPS = [...dynamicPageDynFilterGroupList]
-    DYN_FILTER_GROUPS.forEach((e) => e.enableGroup())
-
-    // 全局启动/关闭快捷键 chrome: Alt+B，firefox: Ctrl+Alt+B
-    let isGroupEnable = true
-    document.addEventListener('keydown', (event) => {
-        if (
-            event.altKey &&
-            ['b', 'B'].includes(event.key) &&
-            (event.ctrlKey || navigator.userAgent.toLocaleLowerCase().includes('chrome'))
-        ) {
-            debug('hotkey detected')
-            if (isGroupEnable) {
-                RULE_GROUPS.forEach((e) => e.disableGroup())
-            } else {
-                RULE_GROUPS.forEach((e) => e.enableGroup(false))
-            }
-            isGroupEnable = !isGroupEnable
-        }
-    })
-
-    // 创建panel，插入功能
-    const panel = new Panel()
-    const createPanelWithMode = (mode: string, groups: Group[]) => {
-        switch (panel.mode) {
-            case undefined:
-                panel.create()
-                panel.mode = mode
-                groups.forEach((e) => {
-                    e.insertGroup()
-                    e.insertGroupItems()
-                })
-                panel.show()
-                break
-            case mode:
-                panel.show()
-                break
-            default:
-                panel.clearGroups()
-                panel.mode = mode
-                groups.forEach((e) => {
-                    e.insertGroup()
-                    e.insertGroupItems()
-                })
-                panel.show()
-        }
+// 首页重定向，避免过滤视频失效
+const redirect = () => {
+    if (location.host === 'www.bilibili.com' && location.pathname === '/index.html') {
+        window.location.replace('https://www.bilibili.com/')
     }
-
-    // 记录reg menu ID
-    const regIDs: string[] = []
-    const unregister = () => {
-        regIDs.forEach((regID) => GM_unregisterMenuCommand(regID))
-        regIDs.splice(0, regIDs.length)
-    }
-    const register = () => {
-        regIDs.push(GM_registerMenuCommand('✅页面净化优化', () => createPanelWithMode('rule', RULE_GROUPS)))
-
-        if (
-            isPageHomepage() ||
-            isPageVideo() ||
-            isPagePopular() ||
-            isPageSearch() ||
-            isPageChannel() ||
-            isPagePlaylist() ||
-            isPageSpace()
-        ) {
-            regIDs.push(
-                GM_registerMenuCommand('✅视频过滤设置', () => createPanelWithMode('videoFilter', VIDEO_FILTER_GROUPS)),
-            )
-        }
-
-        if (isPageDynamic()) {
-            regIDs.push(
-                GM_registerMenuCommand('✅动态过滤设置', () => createPanelWithMode('dynFilter', DYN_FILTER_GROUPS)),
-            )
-        }
-
-        if (isPageVideo() || isPageBangumi() || isPagePlaylist() || isPageDynamic() || isPageSpace()) {
-            regIDs.push(
-                GM_registerMenuCommand('✅评论过滤设置', () =>
-                    createPanelWithMode('commentFilter', COMMENT_FILTER_GROUPS),
-                ),
-            )
-        }
-        // 快捷按钮
-        if (
-            isPageHomepage() ||
-            isPageVideo() ||
-            isPagePopular() ||
-            isPageSearch() ||
-            isPageChannel() ||
-            isPagePlaylist() ||
-            isPageSpace()
-        ) {
-            const videoFilterSideBtnID = 'video-filter-side-btn'
-            const sideBtn = new SideBtn(videoFilterSideBtnID, '视频过滤', () => {
-                panel.isShowing ? panel.hide() : createPanelWithMode('videoFilter', VIDEO_FILTER_GROUPS)
-            })
-            if (GM_getValue(`BILICLEANER_${videoFilterSideBtnID}`, false)) {
-                sideBtn.enable()
-                regIDs.push(
-                    GM_registerMenuCommand('⚡️关闭 视频过滤 快捷按钮', () => {
-                        sideBtn.disable()
-                        unregister()
-                        register()
-                    }),
-                )
-            } else {
-                regIDs.push(
-                    GM_registerMenuCommand('⚡️启用 视频过滤 快捷按钮', () => {
-                        sideBtn.enable()
-                        unregister()
-                        register()
-                    }),
-                )
-            }
-        }
-        if (isPageVideo() || isPageBangumi() || isPagePlaylist() || isPageDynamic() || isPageSpace()) {
-            const commentFilterSideBtnID = 'comment-filter-side-btn'
-            const sideBtn = new SideBtn(commentFilterSideBtnID, '评论过滤', () => {
-                panel.isShowing ? panel.hide() : createPanelWithMode('commentFilter', COMMENT_FILTER_GROUPS)
-            })
-            if (GM_getValue(`BILICLEANER_${commentFilterSideBtnID}`, false)) {
-                sideBtn.enable()
-                regIDs.push(
-                    GM_registerMenuCommand('⚡️关闭 评论过滤 快捷按钮', () => {
-                        sideBtn.disable()
-                        unregister()
-                        register()
-                    }),
-                )
-            } else {
-                regIDs.push(
-                    GM_registerMenuCommand('⚡️启用 评论过滤 快捷按钮', () => {
-                        sideBtn.enable()
-                        unregister()
-                        register()
-                    }),
-                )
-            }
-        }
-    }
-    register()
 }
 
-try {
-    if (!isPageInvalid()) {
-        log('script start')
-        await init()
-        await main()
-        log('script end')
+const main = () => {
+    // 创建插件面板用shadowDOM节点
+    const wrap = document.createElement('div')
+    wrap.id = 'bili-cleaner'
+    const root = wrap.attachShadow({ mode: 'open' })
+    root.append(css)
+    waitForBody().then(() => document.body.appendChild(wrap))
+
+    // 创建插件面板
+    const app = createApp(App as any)
+    app.config.errorHandler = (err, vm, info) => {
+        logger.error('Vue:', err)
+        logger.error('Component:', vm)
+        logger.error('Info:', info)
     }
-} catch (err) {
-    error(err)
+
+    const pinia = createPinia()
+    app.use(pinia)
+
+    app.mount(
+        (() => {
+            const node = document.createElement('div')
+            root.appendChild(node)
+            return node
+        })(),
+    )
+}
+
+const menu = () => {
+    // skip live page iframe
+    if (isPageLive() && self !== top) {
+        return
+    }
+    const ruleStore = useRulePanelStore()
+    const videoStore = useVideoFilterPanelStore()
+    const commentStore = useCommentFilterPanelStore()
+    const dynamicStore = useDynamicFilterPanelStore()
+    const articleStore = useArticleFilterPanelStore()
+    const sideBtnStore = useSideBtnStore()
+
+    GM_registerMenuCommand('✅ 页面净化优化', () => {
+        ruleStore.toggle()
+    })
+    if (videoStore.isPageValid()) {
+        GM_registerMenuCommand('✅ 视频过滤设置', () => {
+            videoStore.toggle()
+        })
+    } else {
+        GM_registerMenuCommand('🚫 视频过滤设置', () => {
+            alert('[bilibili-cleaner] 本页面不支持视频过滤')
+        })
+    }
+
+    if (commentStore.isPageValid()) {
+        GM_registerMenuCommand('✅ 评论过滤设置', () => {
+            commentStore.toggle()
+        })
+    } else {
+        GM_registerMenuCommand('🚫 评论过滤设置', () => {
+            alert('[bilibili-cleaner] 本页面不支持评论过滤')
+        })
+    }
+    if (dynamicStore.isPageValid()) {
+        GM_registerMenuCommand('✅ 动态过滤设置', () => {
+            dynamicStore.toggle()
+        })
+    } else {
+        GM_registerMenuCommand('🚫 动态过滤设置', () => {
+            alert('[bilibili-cleaner] 本页面不支持动态过滤')
+        })
+    }
+
+    if (articleStore.isPageValid()) {
+        GM_registerMenuCommand('✅ 专栏过滤设置', () => {
+            articleStore.toggle()
+        })
+    } else {
+        GM_registerMenuCommand('🚫 专栏过滤设置', () => {
+            alert('[bilibili-cleaner] 本页面不支持专栏过滤')
+        })
+    }
+
+    GM_registerMenuCommand('⚡ 夜间模式开关', () => {
+        toggleDarkMode()
+    })
+    GM_registerMenuCommand('⚡ 快捷按钮开关', () => {
+        sideBtnStore.toggle()
+    })
+    GM_registerMenuCommand('💬 问题反馈', () => {
+        window.open('https://github.com/festoney8/bilibili-cleaner', '_blank')
+    })
+}
+
+logger.info(`mode: ${import.meta.env.MODE}, url: ${location.href}`)
+
+// 存储升级逻辑
+await migrate().catch((err) => {
+    logger.error('Storage key migration failed', err)
+})
+
+// 加载模块、主逻辑、菜单
+for (const fn of [redirect, loadModules, main, menu]) {
+    try {
+        fn()
+    } catch (err) {
+        logger.error(`main.ts ${fn.name} error`, err)
+    }
 }
